@@ -19,7 +19,7 @@ pd.pandas.set_option('display.max_columns', None)
 
 # global variables
 file_path = Path().parent.absolute()
-start_page = 29  # page to start from
+start_page = 30  # page to start from
 csv_file_name = 'Fonder_total.csv'
 
 # path to webdriver for chrome
@@ -29,10 +29,10 @@ DRIVERPATH = r"C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(DRIVERPATH)
 driver.get("https://www.nordnet.se/marknaden/fondlistor?sortField=name&sortOrder=asc&selectedTab=overview&page=" + str(start_page))
 
-soup = BeautifulSoup(driver.page_source, 'lxml')
-table = soup.find_all('table')[0]
-tab_data = [[cell.text for cell in row.find_all(
-    ["th", "td"])] for row in table.find_all("tr")]
+# soup = BeautifulSoup(driver.page_source, 'lxml')
+# table = soup.find_all('table')[0]
+# tab_data = [[cell.text for cell in row.find_all(
+#     ["th", "td"])] for row in table.find_all("tr")]
 
 # global variables
 page_counter = int(start_page)
