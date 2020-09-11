@@ -56,3 +56,29 @@ def get_fund_results(driver):
     # print(results_frame.head())
 
     return results_frame
+
+# clean dataframes percentage numbers.
+
+
+def clean_data_number(number):
+
+    str_number = str(number)
+#    print(str_number)
+
+    if not str_number or len(str_number) == 0:
+        return np.nan
+
+    elif '%0,00' in str_number:
+        return '0.00'
+
+    elif '--' in str_number:
+        return '-' + str_number.split(' ')[1]
+
+    elif '++' in str_number:
+        return str_number.split(' ')[1]
+
+    elif '%' in str_number:
+        return str_number.split(' ')[1]
+
+    else:
+        return number
