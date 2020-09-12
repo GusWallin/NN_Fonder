@@ -13,12 +13,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium import webdriver
 import functions
+import inspect
+import os.path
 
 # settings
 pd.pandas.set_option('display.max_columns', None)
 
-# global variables
-file_path = Path().parent.absolute()
+##### global variables ######
+# get filepath of the. py file
+filename = inspect.getframeinfo(inspect.currentframe()).filename
+file_path = os.path.dirname(os.path.abspath(filename))
+
+print(file_path)
 start_page = 31  # page to start from
 csv_file_name = 'Fonder_total.csv'
 
@@ -52,12 +58,14 @@ while True:
         break
 
 total_df = total_df.applymap(functions.clean_data_number)
-# print(total_df.info())
-# print(total_df.head())
+functions.format_dataframe_columns(total_df)
+
+pd.pandas.set_option('display.max_columns', None)
+print(total_df.head())
+
 
 # save output to a file output
-
-
+print(file_path)
 total_df.to_csv('' + str(file_path) + '\\' + csv_file_name)
 print('File saved as ' + csv_file_name +
       'with ' + str(len(total_df.index)) + ' rows')

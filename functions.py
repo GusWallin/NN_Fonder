@@ -34,7 +34,7 @@ def get_fund_info(driver):
         ["th", "td"])] for row in results_table.find_all("tr")]
 
     results_frame = pd.DataFrame(results_table_data)
-    # print(results_frame.head())
+    results_frame.drop(0, axis=0, inplace=True)
 
     return results_frame
 # function to get the results page and data for each fund.
@@ -53,7 +53,7 @@ def get_fund_results(driver):
         ["th", "td"])] for row in results_table.find_all("tr")]
 
     results_frame = pd.DataFrame(results_table_data)
-    # print(results_frame.head())
+    results_frame.drop(0, axis=0, inplace=True)
 
     return results_frame
 
@@ -82,3 +82,15 @@ def clean_data_number(number):
 
     else:
         return number
+
+
+# formats the dataframe and removes unessesary columns
+def format_dataframe_columns(df: pd.DataFrame):
+
+    df.drop(df.columns[[0, 2, 3, 4, 5, 8, 9, 11, 26]],
+            axis=1, inplace=True)
+    df.drop(df.columns[5:18], axis=1, inplace=True)
+    df.drop(df.columns[13:], axis=1, inplace=True)
+    df.columns = ['Namn', 'Kategori', 'Rating', 'Årlig avgift', 'Risk', '1 vecka', '1 mån',
+                  '3 mån', 'i år', '1 år', '3 år', '5 år', '10 år']
+    df = df.applymap(lambda x: np.NaN if '–' in x else x)
