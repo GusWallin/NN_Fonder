@@ -109,10 +109,13 @@ def df_to_numeric(df: pd.DataFrame):
 def calculate_Funds(df: pd.DataFrame):
 
     df['Return rank sum'] = df.iloc[:, 5:13].rank(
-        axis=0, method='min', ascending=False).sum(axis=1)
+        axis=0, method='min', ascending=False).sum(axis=1).rank(axis=0, method='min', ascending=True)
 
     df['Long term return ranking (3,5,10 years)'] = df.iloc[:, 10:13].rank(
-        axis=0, method='min', ascending=False, na_option='bottom').sum(axis=1)
+        axis=0, method='min', ascending=False, na_option='bottom').sum(axis=1).rank(axis=0, method='min', ascending=True)
+
+    df['Short term return ranking (< 1 year)'] = df.iloc[:, 5:10].rank(
+        axis=0, method='min', ascending=False, na_option='bottom').sum(axis=1).rank(axis=0, method='min', ascending=True)
 
     df['never returned negative'] = df.iloc[:, 5:13].applymap(
         lambda x: True if math.isnan(x) or x >= 0 else False).all(1)

@@ -25,7 +25,7 @@ filename = inspect.getframeinfo(inspect.currentframe()).filename
 file_path = os.path.dirname(os.path.abspath(filename))
 
 print(file_path)
-start_page = 28  # page to start from
+start_page = 1  # page to start from
 csv_file_name = 'Fonder_total.csv'
 
 # path to webdriver for chrome
@@ -47,7 +47,7 @@ while True:
     merge_df = pd.merge(functions.get_fund_info(driver), functions.get_fund_results(
         driver), right_index=True, left_index=True)
 
-    total_df = total_df.append(merge_df)
+    total_df = total_df.append(merge_df, ignore_index=True)
 
     try:
         functions.get_next_page(driver)
@@ -56,6 +56,8 @@ while True:
     except:
         print('exception, end of pages')
         break
+
+driver.quit()
 
 total_df = functions.format_dataframe_columns(total_df)
 total_df = total_df.applymap(functions.clean_data_number)
@@ -71,5 +73,3 @@ print(file_path)
 total_df.to_csv('' + str(file_path) + '\\' + csv_file_name)
 print('File saved as ' + csv_file_name +
       ' with ' + str(len(total_df.index)) + ' rows')
-
-driver.quit()
