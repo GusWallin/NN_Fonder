@@ -83,8 +83,9 @@ def clean_data_number(number):
     else:
         return number
 
-
 # formats the dataframe and removes unessesary columns
+
+
 def format_dataframe_columns(df: pd.DataFrame):
 
     df.drop(df.columns[[0, 2, 3, 4, 5, 8, 9, 11, 26]],
@@ -94,3 +95,26 @@ def format_dataframe_columns(df: pd.DataFrame):
     df.columns = ['Namn', 'Kategori', 'Rating', 'Årlig avgift', 'Risk', '1 vecka', '1 mån',
                   '3 mån', 'i år', '1 år', '3 år', '5 år', '10 år']
     df = df.applymap(lambda x: np.NaN if '–' in x else x)
+
+    return df
+
+
+def df_to_numeric(df: pd.DataFrame):
+    df = df.apply(pd.to_numeric, errors='ignore', axis=0)
+    return df
+
+# calculates renturn rankings to new columns
+
+
+def calculate_Funds(df: pd.DataFrame):
+
+    df['Return rank sum'] = df.iloc[:, 5:13].rank(
+        axis=0, method='min', ascending=False).sum(axis=1)
+
+    df['Long term return ranking (3,5,10 years)'] = df.iloc[:, 10:13].rank(
+        axis=0, method='min', ascending=False, na_option='bottom').sum(axis=1)
+
+    df['never returned negative'] = df.iloc[:, 5:13].applymap(
+        lambda x: True if math.isnan(x) or x >= 0 else False).all(1)
+
+    return df
