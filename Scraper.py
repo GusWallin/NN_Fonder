@@ -25,7 +25,7 @@ filename = inspect.getframeinfo(inspect.currentframe()).filename
 file_path = os.path.dirname(os.path.abspath(filename))
 
 print(file_path)
-start_page = 31  # page to start from
+start_page = 28  # page to start from
 csv_file_name = 'Fonder_total.csv'
 
 # path to webdriver for chrome
@@ -57,17 +57,19 @@ while True:
         print('exception, end of pages')
         break
 
+total_df = functions.format_dataframe_columns(total_df)
 total_df = total_df.applymap(functions.clean_data_number)
-functions.format_dataframe_columns(total_df)
+total_df = functions.df_to_numeric(total_df)
+total_df = functions.calculate_Funds(total_df)
 
 pd.pandas.set_option('display.max_columns', None)
-print(total_df.head())
+# print(total_df.head()
 
 
 # save output to a file output
 print(file_path)
 total_df.to_csv('' + str(file_path) + '\\' + csv_file_name)
 print('File saved as ' + csv_file_name +
-      'with ' + str(len(total_df.index)) + ' rows')
+      ' with ' + str(len(total_df.index)) + ' rows')
 
 driver.quit()
